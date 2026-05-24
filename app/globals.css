@@ -5,80 +5,85 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  
+  --color-background: var(--background);
   --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+
+  --color-msg-sent: var(--msg-sent);
+  --color-msg-sent-text: var(--msg-sent-text);
+  --color-msg-received: var(--msg-received);
+  --color-msg-received-text: var(--msg-received-text);
 }
 
 :root {
-  /* Ultra-Premium Pearl/Snow Palette */
-  --background: oklch(0.995 0.005 280); /* Very faint cool lavender/blue tint on white */
-  --foreground: oklch(0.15 0.02 280);
-  
-  --card: oklch(1 0 0 / 0.7); /* Translucent white for glassmorphism */
-  --card-foreground: oklch(0.15 0.02 280);
-  
-  --primary: oklch(0.45 0.18 280); /* Deep vibrant Indigo/Purple */
-  --primary-foreground: oklch(0.99 0 0);
-  
-  --secondary: oklch(0.95 0.01 280);
-  --secondary-foreground: oklch(0.25 0.02 280);
-  
-  --muted: oklch(0.96 0.01 280);
-  --muted-foreground: oklch(0.55 0.02 280);
-  
-  --accent: oklch(0.94 0.02 280);
-  --accent-foreground: oklch(0.25 0.02 280);
-  
-  --border: oklch(0.9 0.01 280 / 0.4);
-  --input: oklch(0.95 0.01 280 / 0.5);
-  --ring: oklch(0.45 0.18 280 / 0.3);
-  
-  --radius: 1rem;
+  /* LIGHT MODE (Vibrant & Airy Neon) */
+  --primary: #8B5CF6; /* Neon Purple */
+  --primary-foreground: #FFFFFF;
+  --success: #10B981;
+
+  --background: #F3F4F6;
+  --card: rgba(255, 255, 255, 0.7); /* Glass */
+  --tertiary: rgba(255, 255, 255, 0.5);
+  --border: rgba(0, 0, 0, 0.05);
+  --foreground: #0F172A;
+  --muted: #64748B;
+
+  --msg-sent: #8B5CF6;
+  --msg-sent-text: #FFFFFF;
+  --msg-received: #FFFFFF;
+  --msg-received-text: #0F172A;
+}
+
+.dark {
+  /* DARK MODE (Ultra Cyberpunk Neon) */
+  --primary: #06B6D4; /* Electric Cyan */
+  --primary-foreground: #000000;
+  --success: #10B981;
+
+  --background: #09090B; /* Deep Space Black */
+  --card: rgba(255, 255, 255, 0.03); /* Deep Glassmorphism */
+  --tertiary: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08); /* Barely visible border */
+  --foreground: #F8FAFC;
+  --muted: #94A3B8;
+
+  --msg-sent: #06B6D4;
+  --msg-sent-text: #000000;
+  --msg-received: rgba(255, 255, 255, 0.05);
+  --msg-received-text: #F8FAFC;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
+  }
+  
+  /* The Secret Sauce: Massive glowing orbs behind the entire UI in Dark Mode */
+  .dark body {
     background-image: 
-      radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.15), transparent 25%);
     background-attachment: fixed;
   }
+
   html {
     @apply font-sans;
   }
 }
 
 @layer utilities {
-  /* Premium Glass Utilities */
-  .glass-panel {
-    @apply bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)];
-  }
-  
   .glass-card {
-    @apply bg-white/50 backdrop-blur-xl border border-white/40 shadow-[0_4px_20px_rgb(0,0,0,0.03)];
-  }
-
-  .text-gradient {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500;
+    @apply bg-card backdrop-blur-2xl border border-border shadow-2xl;
   }
 
   /* Custom invisible scrollbar for ultra-clean UI */
@@ -89,6 +94,6 @@
     @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-black/5 rounded-full hover:bg-black/10 transition-colors;
+    @apply bg-black/10 dark:bg-white/10 rounded-full hover:bg-black/20 dark:hover:bg-white/20 transition-colors;
   }
 }

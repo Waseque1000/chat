@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,14 +11,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
 import { SocketProvider } from "@/components/SocketProvider";
 import { UserProvider } from "@/components/UserProvider";
 import { CallProvider } from "@/components/CallProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata = {
-  title: "ChatSphere - Modern Real-Time Chat",
-  description: "A premium real-time messaging platform.",
+  title: "ChatSphere V3",
+  description: "Ultra-Premium Real-Time Chat Experience",
 };
 
 export default function RootLayout({ children }) {
@@ -26,18 +32,20 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${outfit.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background">
-        <UserProvider>
-          <SocketProvider>
-            <CallProvider>
-              <TooltipProvider>
-                {children}
-              </TooltipProvider>
-            </CallProvider>
-          </SocketProvider>
-        </UserProvider>
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
+        <ThemeProvider>
+          <UserProvider>
+            <SocketProvider>
+              <CallProvider>
+                <TooltipProvider>
+                  {children}
+                </TooltipProvider>
+              </CallProvider>
+            </SocketProvider>
+          </UserProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

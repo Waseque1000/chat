@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "./UserProvider";
-import { X, Check, Camera, User as UserIcon } from "lucide-react";
+import { useTheme } from "./ThemeProvider";
+import { X, Check, Camera, User as UserIcon, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 
 export default function ProfileModal({ isOpen, onClose }) {
   const { user, updateProfile } = useUser();
+  const { isDark, toggleTheme } = useTheme();
   const [username, setUsername] = useState(user?.username || "");
   const [avatar, setAvatar] = useState(user?.avatar || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,6 +67,11 @@ export default function ProfileModal({ isOpen, onClose }) {
               </div>
 
               <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 p-8 flex flex-col items-center border-b border-black/5">
+                <div className="absolute top-4 left-4">
+                  <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-black/5 text-gray-500 transition-colors">
+                    {isDark ? <Sun size={20} /> : <Moon size={20} />}
+                  </button>
+                </div>
                 <div className="relative group cursor-pointer mb-4">
                   <Avatar className="w-24 h-24 ring-4 ring-white shadow-xl">
                     <AvatarImage src={avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`} />
