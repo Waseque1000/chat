@@ -12,7 +12,7 @@ const CallContext = createContext(null);
 export const useCall = () => useContext(CallContext);
 
 export const CallProvider = ({ children }) => {
-  const socket = useSocket();
+  const { socket } = useSocket();
   const { user } = useUser();
 
   const [callStatus, setCallStatus] = useState('idle'); // idle, receiving, ringing, connected

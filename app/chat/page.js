@@ -11,11 +11,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import ProfileModal from "@/components/ProfileModal";
+import { StoryTray } from "@/components/StoryTray";
 
 export default function ChatDashboard() {
   const router = useRouter();
   const { user, loading, logout } = useUser();
-  const socket = useSocket();
+  const { socket, onlineUsers = [] } = useSocket() || {};
   const { callUser } = useCall();
 
   const [users, setUsers] = useState([]);
@@ -273,17 +274,19 @@ export default function ChatDashboard() {
           </button>
         </div>
         
-        <div className="p-5 pb-2">
-          <div className="relative group">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" size={18} />
+        <div className="p-4 border-b border-black/5 bg-white/40">
+          <div className="relative flex items-center">
+            <Search className="absolute left-4 text-gray-400" size={18} />
             <Input 
-              className="pl-10 bg-white/60 border-black/5 focus-visible:bg-white focus-visible:ring-primary/20 focus-visible:border-primary/30 rounded-2xl h-12 text-sm shadow-sm transition-all text-gray-900" 
               placeholder="Search people..." 
+              className="pl-11 bg-white/60 border-black/5 h-12 rounded-2xl focus-visible:ring-indigo-500 shadow-[0_4px_20px_rgb(0,0,0,0.03)]"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
+
+        <StoryTray onlineUsers={onlineUsers} />
 
         <ScrollArea className="flex-1 px-3">
           <div className="space-y-1 py-2 px-2">
@@ -327,12 +330,8 @@ export default function ChatDashboard() {
                 ) : (
                   chats.map((chat) => {
                     const isSelected = selectedChat?._id === chat._id;
+                    const isOnline = onlineUsers.includes(getOtherParticipantId(chat));
                     return (
-                      <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        key={chat._id} 
-                        onClick={() => {
                           setSelectedChat(chat);
                           
                           // Mark as read locally
@@ -351,10 +350,15 @@ export default function ChatDashboard() {
                               : 'bg-transparent border-transparent hover:bg-white/50 hover:border-black/5'
                         }`}
                       >
-                        <Avatar className="h-12 w-12 shadow-sm">
-                          <AvatarImage src={getChatAvatar(chat)} />
-                          <AvatarFallback>{(getChatName(chat) || 'C')[0].toUpperCase()}</AvatarFallback>
-                        </Avatar>
+                        <div className="relative">
+                          <Avatar className="h-12 w-12 shadow-sm">
+                            <AvatarImage src={getChatAvatar(chat)} />
+                            <AvatarFallback>{(getChatName(chat) || 'C')[0].toUpperCase()}</AvatarFallback>
+                          </Avatar>
+                          {isOnline && (
+                            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-white shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+                          )}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-baseline mb-0.5">
                             <h4 className={`text-base font-semibold truncate ${isSelected ? 'text-primary' : chat.unread ? 'text-indigo-900' : 'text-gray-900'}`}>{getChatName(chat)}</h4>
@@ -404,10 +408,17 @@ export default function ChatDashboard() {
                 </Avatar>
                 <div>
                   <h2 className="text-lg font-bold text-gray-900">{getChatName(selectedChat)}</h2>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
-                    <p className="text-xs text-gray-500 font-medium">Online</p>
-                  </div>
+                  {onlineUsers.includes(getOtherParticipantId(selectedChat)) ? (
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+                      <p className="text-xs text-gray-500 font-medium">Online</p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+                      <p className="text-xs text-gray-500 font-medium">Offline</p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-1.5 md:gap-3">
