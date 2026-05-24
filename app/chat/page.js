@@ -332,6 +332,11 @@ export default function ChatDashboard() {
                     const isSelected = selectedChat?._id === chat._id;
                     const isOnline = onlineUsers.includes(getOtherParticipantId(chat));
                     return (
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        key={chat._id} 
+                        onClick={() => {
                           setSelectedChat(chat);
                           
                           // Mark as read locally
