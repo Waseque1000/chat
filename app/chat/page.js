@@ -257,21 +257,34 @@ export default function ChatDashboard() {
       >
         <div className="p-5 border-b border-black/5 bg-white/40 flex items-center justify-between">
           <div 
+            className="flex items-center gap-3 cursor-pointer group"
             onClick={() => setIsProfileOpen(true)}
-            className="flex items-center gap-3 cursor-pointer group p-1.5 -ml-1.5 rounded-2xl hover:bg-black/5 transition-all"
           >
-            <Avatar className="h-11 w-11 shadow-sm ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
-              <AvatarImage src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`} />
-              <AvatarFallback>{(user.username || 'U')[0].toUpperCase()}</AvatarFallback>
+            <Avatar className="h-12 w-12 border-2 border-transparent group-hover:border-indigo-500 transition-all">
+              <AvatarImage src={user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username}`} />
+              <AvatarFallback>{(user?.username || 'U')[0].toUpperCase()}</AvatarFallback>
             </Avatar>
             <div>
-              <h2 className="font-bold text-gray-900 group-hover:text-primary transition-colors">{user.username}</h2>
-              <p className="text-xs text-gray-500 font-medium">My Profile</p>
+              <h3 className="font-bold text-gray-900 leading-tight">{user?.username}</h3>
+              <p className="text-xs text-gray-500">My Profile</p>
             </div>
           </div>
-          <button onClick={logout} className="p-2.5 rounded-full bg-white shadow-sm border border-black/5 hover:bg-gray-50 text-gray-600 transition-all">
-            <Settings size={18} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => setIsProfileOpen(true)} 
+              className="p-2.5 rounded-full hover:bg-black/5 text-gray-400 hover:text-indigo-600 transition-colors"
+              title="Edit Profile"
+            >
+              <Settings size={20} />
+            </button>
+            <button 
+              onClick={logout} 
+              className="p-2.5 rounded-full hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+              title="Log Out"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
         </div>
         
         <div className="p-4 border-b border-black/5 bg-white/40">
