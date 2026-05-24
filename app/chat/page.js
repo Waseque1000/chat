@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/components/UserProvider";
 import { useSocket } from "@/components/SocketProvider";
 import { useCall } from "@/components/CallProvider";
-import { Search, Send, Settings, User, MoreVertical, Phone, Video, Info, Smile, MessageSquare, Edit3 } from "lucide-react";
+import { Search, Send, Settings, User, MoreVertical, Phone, Video, Info, Smile, MessageSquare, Edit3, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -245,14 +245,14 @@ export default function ChatDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-background p-4 md:p-6 overflow-hidden gap-6">
+    <div className="flex h-[100dvh] bg-background p-2 md:p-4 lg:p-6 overflow-hidden gap-4 lg:gap-6">
       <ProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
 
       {/* Floating Sidebar */}
       <motion.div 
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="w-80 md:w-96 flex flex-col glass-panel rounded-3xl z-10 overflow-hidden flex-shrink-0"
+        className={`w-full md:w-80 lg:w-96 flex-col glass-panel rounded-[2rem] z-10 overflow-hidden flex-shrink-0 ${selectedChat ? 'hidden md:flex' : 'flex'}`}
       >
         <div className="p-5 border-b border-black/5 bg-white/40 flex items-center justify-between">
           <div 
@@ -385,14 +385,20 @@ export default function ChatDashboard() {
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="flex-1 flex flex-col relative glass-panel rounded-3xl overflow-hidden shadow-xl"
+        className={`flex-1 flex-col relative glass-panel rounded-[2rem] overflow-hidden shadow-xl ${!selectedChat ? 'hidden md:flex' : 'flex'}`}
       >
         {selectedChat ? (
           <>
             {/* Chat Header */}
-            <div className="h-20 shrink-0 border-b border-black/5 flex items-center justify-between px-8 bg-white/40 z-10 backdrop-blur-sm">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-12 w-12 shadow-sm">
+            <div className="h-20 shrink-0 border-b border-black/5 flex items-center justify-between px-4 md:px-8 bg-white/40 z-10 backdrop-blur-sm">
+              <div className="flex items-center gap-3 md:gap-4">
+                <button 
+                  onClick={() => setSelectedChat(null)}
+                  className="md:hidden p-2 -ml-2 rounded-full hover:bg-black/5 text-gray-600 transition-colors"
+                >
+                  <ArrowLeft size={20} />
+                </button>
+                <Avatar className="h-10 w-10 md:h-12 md:w-12 shadow-sm">
                   <AvatarImage src={getChatAvatar(selectedChat)} />
                   <AvatarFallback>{(getChatName(selectedChat) || 'C')[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
@@ -404,15 +410,15 @@ export default function ChatDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button onClick={() => callUser(getOtherParticipantId(selectedChat), false, getChatName(selectedChat), getChatAvatar(selectedChat))} className="w-10 h-10 rounded-full bg-white border border-black/5 flex items-center justify-center text-gray-600 hover:text-primary hover:shadow-md transition-all"><Phone size={18} /></button>
-                <button onClick={() => callUser(getOtherParticipantId(selectedChat), true, getChatName(selectedChat), getChatAvatar(selectedChat))} className="w-10 h-10 rounded-full bg-white border border-black/5 flex items-center justify-center text-gray-600 hover:text-primary hover:shadow-md transition-all"><Video size={18} /></button>
-                <button className="w-10 h-10 rounded-full bg-white border border-black/5 flex items-center justify-center text-gray-600 hover:text-primary hover:shadow-md transition-all"><Info size={18} /></button>
+              <div className="flex items-center gap-1.5 md:gap-3">
+                <button onClick={() => callUser(getOtherParticipantId(selectedChat), false, getChatName(selectedChat), getChatAvatar(selectedChat))} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white border border-black/5 flex items-center justify-center text-gray-600 hover:text-primary hover:shadow-md transition-all"><Phone size={16} className="md:w-[18px] md:h-[18px]" /></button>
+                <button onClick={() => callUser(getOtherParticipantId(selectedChat), true, getChatName(selectedChat), getChatAvatar(selectedChat))} className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white border border-black/5 flex items-center justify-center text-gray-600 hover:text-primary hover:shadow-md transition-all"><Video size={16} className="md:w-[18px] md:h-[18px]" /></button>
+                <button className="hidden sm:flex w-9 h-9 md:w-10 md:h-10 rounded-full bg-white border border-black/5 items-center justify-center text-gray-600 hover:text-primary hover:shadow-md transition-all"><Info size={16} className="md:w-[18px] md:h-[18px]" /></button>
               </div>
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 min-h-0 px-8 py-6">
+            <ScrollArea className="flex-1 min-h-0 px-4 md:px-8 py-6">
               <div className="space-y-6 flex flex-col pb-4">
                 {messages.map((m, i) => {
                   const isMe = m.sender._id === user._id;
@@ -462,23 +468,23 @@ export default function ChatDashboard() {
             </ScrollArea>
 
             {/* Input Area */}
-            <div className="p-6 pt-2 shrink-0 bg-white/20 backdrop-blur-md">
-              <form onSubmit={sendMessage} className="flex items-center gap-3 bg-white p-2 rounded-full shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-black/5">
-                <button type="button" className="p-2.5 text-gray-400 hover:text-primary transition-colors rounded-full hover:bg-black/5 ml-1">
-                  <Smile size={22} />
+            <div className="p-3 md:p-6 pt-2 shrink-0 bg-white/20 backdrop-blur-md">
+              <form onSubmit={sendMessage} className="flex items-center gap-2 md:gap-3 bg-white p-1.5 md:p-2 rounded-full shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-black/5">
+                <button type="button" className="p-2 md:p-2.5 text-gray-400 hover:text-primary transition-colors rounded-full hover:bg-black/5 ml-0.5 md:ml-1">
+                  <Smile size={20} className="md:w-[22px] md:h-[22px]" />
                 </button>
                 <Input 
                   value={newMessage}
                   onChange={handleTypingChange}
                   placeholder="Message..." 
-                  className="flex-1 bg-transparent border-transparent focus-visible:ring-0 shadow-none text-[15px] text-gray-800 placeholder:text-gray-400 px-0"
+                  className="flex-1 bg-transparent border-transparent focus-visible:ring-0 shadow-none text-[14px] md:text-[15px] text-gray-800 placeholder:text-gray-400 px-0 h-10"
                 />
                 <button 
                   type="submit"
                   disabled={!newMessage.trim()}
-                  className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 flex items-center justify-center text-white shadow-md disabled:opacity-50 disabled:scale-100 hover:scale-105 transition-all mr-1"
+                  className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 flex items-center justify-center text-white shadow-md disabled:opacity-50 disabled:scale-100 hover:scale-105 transition-all mr-0.5 md:mr-1 shrink-0"
                 >
-                  <Send size={18} className="ml-0.5" />
+                  <Send size={16} className="ml-0.5 md:w-[18px] md:h-[18px]" />
                 </button>
               </form>
             </div>
