@@ -13,28 +13,14 @@ export const ThemeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Check local storage or system preference on mount
-    const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    
-    if (saved === "dark" || (!saved && prefersDark)) {
-      setIsDark(true);
-      document.documentElement.classList.add("dark");
-    }
+    // Enforce white/light mode only
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
   }, []);
 
   const toggleTheme = () => {
-    setIsDark((prev) => {
-      const nextTheme = !prev;
-      if (nextTheme) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-      return nextTheme;
-    });
+    // Theme toggle is disabled to enforce light mode
+    console.log("Theme switching is disabled. Enforcing light mode.");
   };
 
   return (
