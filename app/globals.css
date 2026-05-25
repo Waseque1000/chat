@@ -23,40 +23,40 @@
 }
 
 :root {
-  /* LIGHT MODE (Vibrant & Airy Neon) */
-  --primary: #8B5CF6; /* Neon Purple */
+  /* LIGHT MODE (Playful & Vibrant) */
+  --primary: #5865F2; /* Discord Blurple */
   --primary-foreground: #FFFFFF;
-  --success: #10B981;
+  --success: #2ECC71;
 
-  --background: #F3F4F6;
-  --card: rgba(255, 255, 255, 0.7); /* Glass */
-  --tertiary: rgba(255, 255, 255, 0.5);
-  --border: rgba(0, 0, 0, 0.05);
-  --foreground: #0F172A;
+  --background: #F6F9FC; /* Soft Stripe-like gray */
+  --card: #FFFFFF; /* Solid White */
+  --tertiary: #EDF2F7;
+  --border: #E2E8F0;
+  --foreground: #1E293B;
   --muted: #64748B;
 
-  --msg-sent: #8B5CF6;
+  --msg-sent: #5865F2;
   --msg-sent-text: #FFFFFF;
-  --msg-received: #FFFFFF;
-  --msg-received-text: #0F172A;
+  --msg-received: #F1F5F9;
+  --msg-received-text: #1E293B;
 }
 
 .dark {
-  /* DARK MODE (Ultra Cyberpunk Neon) */
-  --primary: #06B6D4; /* Electric Cyan */
-  --primary-foreground: #000000;
-  --success: #10B981;
+  /* DARK MODE (Playful & Vibrant) */
+  --primary: #5865F2; /* Keep Blurple for brand consistency */
+  --primary-foreground: #FFFFFF;
+  --success: #2ECC71;
 
-  --background: #09090B; /* Deep Space Black */
-  --card: rgba(255, 255, 255, 0.03); /* Deep Glassmorphism */
-  --tertiary: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.08); /* Barely visible border */
+  --background: #1E1F22; /* Discord-like dark */
+  --card: #2B2D31; /* Discord-like card */
+  --tertiary: #313338;
+  --border: #3F4147;
   --foreground: #F8FAFC;
   --muted: #94A3B8;
 
-  --msg-sent: #06B6D4;
-  --msg-sent-text: #000000;
-  --msg-received: rgba(255, 255, 255, 0.05);
+  --msg-sent: #5865F2;
+  --msg-sent-text: #FFFFFF;
+  --msg-received: #383A40;
   --msg-received-text: #F8FAFC;
 }
 
@@ -68,14 +68,6 @@
     @apply bg-background text-foreground antialiased transition-colors duration-300;
   }
   
-  /* The Secret Sauce: Massive glowing orbs behind the entire UI in Dark Mode */
-  .dark body {
-    background-image: 
-      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
-      radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.15), transparent 25%);
-    background-attachment: fixed;
-  }
-
   html {
     @apply font-sans;
   }
@@ -83,7 +75,11 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-card backdrop-blur-2xl border border-border shadow-2xl;
+    @apply bg-card border border-border shadow-[0_4px_14px_0_rgba(88,101,242,0.1)];
+  }
+
+  .dark .glass-card {
+    @apply shadow-[0_4px_14px_0_rgba(0,0,0,0.3)];
   }
 
   /* Custom invisible scrollbar for ultra-clean UI */
